@@ -1,0 +1,230 @@
+---
+title: "Exercise 1"
+author: "Jay Morgan"
+date: "October 18, 2018"
+output: pdf_document
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+##Task 1 Sequences
+
+###1. Create the vector x.
+
+```{r echo=TRUE, comment='    ##'}
+    x <- seq(-30, 30, 5)
+        
+    x
+```
+
+
+###2. Create a second vectory, which contains exactly the same elements with the same multiplicities as vector x, but in a *random* order.
+
+```{r echo=TRUE, comment='    ##'}
+    y <- seq(-30, 30, 5)
+    set.seed(283)
+    y <- sample(y)
+    
+    y
+```
+
+
+###3. On how many and which position(s) do the values of x and y agree?
+```{r echo=TRUE, comment='    ##'}
+    length(which(x == y))
+    which(x == y)
+```
+
+\newpage
+
+## Task 2 Sequences
+
+###1. John Wallis (1616-1703):
+```{r echo=TRUE, comment='    ##'}
+    i <- 1:10000
+    
+    Wallis <- prod(((2*i)/((2*i)-1))*((2*i)/((2*i)+1)))
+    Wallis
+```
+
+
+###2. Gottfried Leibnitz (1646-1716):
+```{r echo=TRUE, comment='    ##'}
+    i <- 1:10000
+    
+    Leibnitz <- sum(((-1)^(i+1))/((2*i)-1))
+    Leibnitz
+```
+
+
+###3. Leonhard Euler (1707-1783):
+
+```{r echo=TRUE, comment='    ##'}
+    i <- 1:10000
+    
+    Euler <- sum(1/(i^2))
+    Euler
+```
+
+
+####Which of the above formulas shows the smallest relative deviation from $\pi$ for this value of *n*?
+```{r echo=TRUE, comment='    ##'}
+    pi
+    Wallis*2
+    Leibnitz*4
+    sqrt(Euler*6)
+```
+
+The Wallis estimation has the smallest deviation from $\pi$ at *n* = 10000.
+
+
+\newpage
+
+## Task 3 Vectors
+
+###1. Create a data vector x containing the natural numbers 1,2,...,100 and a second data vector y containing a sample of size *n* = 70 from the set of natural numbers 1,2,...,150 with replacement.
+
+```{r echo=TRUE, comment='    ##'}
+    x <- 1:100
+
+    set.seed(283)    
+    y <- sample(1:150, 70, replace = TRUE)
+```
+
+###2. Determine those elements of x, which are not contained in y. How many elements are there?
+
+```{r echo=TRUE, comment='    ##'}
+    setdiff(x, y)
+
+    length(setdiff(x, y))
+```
+
+###3. Are there duplicate entries in your vector y? If yes, create a new vector z, with these duplicates. If no, just take y as vector z.
+```{r echo=TRUE, comment='    ##'}
+    any(duplicated(y))
+
+    z <- which(duplicated(y) == 'TRUE')
+    
+    z
+
+```
+
+###4. How many elements of z are multiples of 3?
+```{r echo=TRUE, comment='    ##'}
+    length(which(z%%3 == 0))
+```
+
+###5. Revert the vector y without (!) using the function `rev()`, i.e. if y were the vector(5,20,81), the result should be the vector(81,20,5).
+```{r echo=TRUE, comment='    ##'}
+    y[seq(70, 1, -1)]
+```
+
+\newpage
+
+## Task 4 Point Estimation
+
+
+
+###1. Draw a reproducible sample of size *n*=30 from a normal distribution with $\mu$=7 and $\sigma^2$=4.
+```{r echo=TRUE, comment='    ##'}
+    n <- 30
+    set.seed(283)
+    rnorm(n, mean = 7, sd = 4)
+```
+
+###2. Estimate $\mu$ and $\sigma^2$ on the basis of your sample using the above formulas, i.e. without (!) using the functions `mean()`, `var()` and `sd()`.
+```{r echo=TRUE, comment='    ##'}
+    n <- 30
+    set.seed(283)
+    x <- rnorm(n, mean = 7, sd = 4)
+    
+    sum(x)/n   # Estimated mean
+    
+    sum((x-sum(x)/n)^2)/(n-1)  # Estimated variance
+   
+```
+
+###3. Compare your results with the output of the functions `mean()` and `var()`.
+```{r echo=TRUE, comment='    ##'}
+    n <- 30
+    set.seed(283)
+    x <- rnorm(n, mean = 7, sd = 4)
+    
+    sum(x)/n   # Estimated mean
+    
+    mean(x)    # Population mean
+    
+    sum(x)/n == mean(x)  # Comparison of mean
+    
+    sum((x-sum(x)/n)^2)/(n-1)  # Estimated variance
+    
+    var(x)    # Population variance
+
+    sum((x-sum(x)/n)^2)/(n-1) == var(x)  # Comparison of variance
+```
+
+\newpage
+## Task 4 continued
+
+###4. Are your estimates close to the population values? Repeat the steps 1 and 3 from above witha sample of size *n* = 3000. What do we learn?
+
+The estimates are very close to the population values produced by the functions.
+```{r echo=TRUE, comment='    ##'}
+    n <- 3000
+    set.seed(283)
+    x <- rnorm(n, mean = 7, sd = 4)
+    
+    sum(x)/n   # Estimated mean
+    
+    mean(x)    # Population mean
+    
+    sum(x)/n == mean(x)  # Comparison of mean
+    
+    sum((x-sum(x)/n)^2)/(n-1)  # Estimated variance
+    
+    var(x)    # Population variance
+
+    sum((x-sum(x)/n)^2)/(n-1) == var(x)  # Comparison of variance
+```
+We learn that as the number of samples increase, the observed mean and variance values become closer to the defined $\mu$ and $\sigma^2$ values of 7 and 4 respectively.
+
+
+
+\newpage
+
+## Task 5 Interval Estimation
+
+###1. Draw a reproducible sample of size *n*=30 from a normal distribution with $\mu$=7 and $\sigma^2$=4.
+```{r echo=TRUE, comment='    ##'}
+    n <- 30
+    set.seed(283)
+    rnorm(n, mean = 7, sd = 4)
+```
+
+###2. Calculate a confidence interval for $\mu$ and $\sigma^2$ for $\alpha$ = 0.05 (hence the confidence level is 1 - $\alpha$ = 0.95). **R**-functions such as `mean()`, `sd()` and `var()` are allowed.
+```{r echo=TRUE, comment='    ##'}
+    n <- 30
+    set.seed(283)
+    x <- rnorm(n, mean = 7, sd = 4)
+    
+    qnorm(p = c(0.05, 0.95), mean = 7, sd = 4)
+
+    qnorm(p = c(0.05, 0.95), mean = mean(x), sd = sd(x))
+    ```
+
+###3. Do the true parameters lie in your confidence intervals? If yes, is this always the case?  If no, why not?
+```{r echo=TRUE, comment='    ##'}
+    mean_95 <- qnorm(p = c(0.05, 0.95), mean = 7, sd = 4)
+
+    mean_x <- qnorm(p = c(0.05, 0.95), mean = mean(x), sd = sd(x))
+    
+    mean_95[1] < mean_x[1]
+    
+    mean_95[2] > mean_x[2]
+```
